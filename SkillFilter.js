@@ -644,11 +644,11 @@ function naukriSkillsFilter() {
     // Update the progress text
     const progressText = document.getElementById('search-progress-text');
     if (progressText) {
-      progressText.textContent = `Found ${config.collectedJobs.length} jobs across ${currentPage} pages!`;
+      progressText.textContent = `Found ${config.collectedJobs.length} jobs across ${getCurrentPage()} pages!`;
     }
     
     // Show a completion alert
-    alert(`Full search complete! Found ${config.collectedJobs.length} matching jobs across ${currentPage} pages.`);
+    alert(`Full search complete! Found ${config.collectedJobs.length} matching jobs across ${getCurrentPage()} pages.`);
     
     // Export the results automatically
     exportFullSearchResults();
