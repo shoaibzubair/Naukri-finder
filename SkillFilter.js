@@ -9,30 +9,14 @@
 function naukriSkillsFilter() {
   // Configuration object - adjust these values
   const config = {
-    // Required skills - jobs must have ALL these skills (case-insensitive)
     requiredSkills: ["aws", "linux"],
-    
-    // Minimum company rating (set to 0 to ignore rating)
     minRating: 3.5,
-    
-    // Maximum age of job posting in days (set to 0 to ignore)
-    maxDaysOld: 7,
-    
-    // Visual settings
     highlightColor: "#e6f7ff",
     hideMismatches: true,  // Set to false to show all jobs but highlight matches
-    
-    // Export settings
     exportFilename: "filtered_jobs.csv",
-    
-    // Include jobs with no ratings when minRating is set
     includeUnratedJobs: true,
-    
-    // Full search settings
     maxPagesToSearch: 50,  // Maximum number of pages to search
     searchDelay: 3000,     // Delay between page transitions in ms
-    
-    // Collected jobs during full search
     collectedJobs: []
   };
   
@@ -101,15 +85,6 @@ function naukriSkillsFilter() {
     `;
     panel.appendChild(unratedToggle);
     
-    // Create max days old input
-    const daysInput = document.createElement('div');
-    daysInput.style.cssText = 'margin-bottom: 10px;';
-    daysInput.innerHTML = `
-      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Max Days Old:</label>
-      <input type="number" id="days-input" style="width: 100%; padding: 5px; box-sizing: border-box;" 
-             value="${config.maxDaysOld}" min="0" max="90">
-    `;
-    panel.appendChild(daysInput);
     
     // Create max pages to search input
     const pagesInput = document.createElement('div');
@@ -242,7 +217,6 @@ function naukriSkillsFilter() {
     
     config.minRating = parseFloat(document.getElementById('rating-input').value) || 0;
     config.includeUnratedJobs = document.getElementById('include-unrated').checked;
-    config.maxDaysOld = parseInt(document.getElementById('days-input').value) || 0;
     config.hideMismatches = document.getElementById('hide-mismatches').checked;
     config.maxPagesToSearch = parseInt(document.getElementById('max-pages-input').value) || 50;
   };
@@ -322,7 +296,6 @@ function naukriSkillsFilter() {
       const dateElement = jobCard.querySelector('.job-post-day');
       const postedDateText = dateElement ? dateElement.textContent.trim() : 'N/A';
       const postedDate = parsePostedDate(postedDateText);
-      const daysOld = postedDate ? Math.floor((new Date() - postedDate) / (1000 * 60 * 60 * 24)) : null;
       
       // Creating a combined text of skills and description for better skill matching
       const combinedText = (description.toLowerCase() + ' ' + skills.join(' ').toLowerCase());
@@ -340,7 +313,6 @@ function naukriSkillsFilter() {
         skills,
         postedDateText,
         postedDate,
-        daysOld,
         description,
         combinedText
       };
@@ -367,22 +339,14 @@ function naukriSkillsFilter() {
   
   // Match job against filters
   const matchesFilters = (job) => {
-    // Check rating - but allow unrated jobs if includeUnratedJobs is true
     if (config.minRating > 0 && job.rating !== null && job.rating < config.minRating) {
       return false;
     }
     
-    // Skip rating check for unrated jobs if includeUnratedJobs is true
     if (config.minRating > 0 && job.rating === null && !config.includeUnratedJobs) {
       return false;
     }
     
-    // Check posting date
-    if (config.maxDaysOld > 0 && (job.daysOld === null || job.daysOld > config.maxDaysOld)) {
-      return false;
-    }
-    
-    // Check if the job has ALL required skills (AND logic) - now case insensitive
     return hasAllRequiredSkills(job, config.requiredSkills);
   };
   
@@ -493,7 +457,6 @@ function naukriSkillsFilter() {
           ${config.requiredSkills.length > 0 ? `Skills: ${config.requiredSkills.join(', ')}` : 'No skills filter'}
           ${config.minRating > 0 ? `, Min rating: ${config.minRating}` : ''}
           ${config.minRating > 0 ? ` (${config.includeUnratedJobs ? 'including' : 'excluding'} unrated)` : ''}
-          ${config.maxDaysOld > 0 ? `, Max age: ${config.maxDaysOld} days` : ''}
         </div>
       `;
     }
