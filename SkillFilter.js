@@ -199,6 +199,18 @@ function naukriSkillsFilter() {
     progressContainer.appendChild(progressText);
     panel.appendChild(progressContainer);
     
+    // Add total jobs collected display
+    const totalJobsCollectedDisplay = document.createElement('div');
+    totalJobsCollectedDisplay.id = 'total-jobs-collected';
+    totalJobsCollectedDisplay.style.cssText = `
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    `;
+    totalJobsCollectedDisplay.textContent = 'Total Jobs Collected: 0';
+    panel.appendChild(totalJobsCollectedDisplay);
+    
     // Stats display
     const statsDisplay = document.createElement('div');
     statsDisplay.id = 'filter-stats';
@@ -587,6 +599,12 @@ function naukriSkillsFilter() {
     
     // Add to the collection
     config.collectedJobs = [...config.collectedJobs, ...simplifiedJobs];
+    
+    // Update total jobs collected display
+    const totalJobsCollectedDisplay = document.getElementById('total-jobs-collected');
+    if (totalJobsCollectedDisplay) {
+      totalJobsCollectedDisplay.textContent = `Total Jobs Collected: ${config.collectedJobs.length}`;
+    }
     
     console.log(`Found ${simplifiedJobs.length} matching jobs on page ${currentPageNum}`);
     console.log(`Total jobs collected so far: ${config.collectedJobs.length}`);
