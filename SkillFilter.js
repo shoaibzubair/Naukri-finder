@@ -463,8 +463,6 @@ function naukriSkillsFilter() {
     const statsDisplay = document.getElementById('filter-stats');
     if (statsDisplay) {
       statsDisplay.innerHTML = `
-        <strong>Results:</strong> Showing ${matchingJobs} matching jobs out of ${totalJobs} total jobs.
-        <div style="margin-top: 5px;">
           <strong>Filters:</strong> 
           ${config.requiredSkills.length > 0 ? `Skills: ${config.requiredSkills.join(', ')}` : 'No skills filter'}
           ${config.minRating > 0 ? `, Min rating: ${config.minRating}` : ''}
